@@ -1,14 +1,39 @@
 package ru.vsu.cs.course2.services;
 
 import ru.vsu.cs.course2.model.Player;
-import ru.vsu.cs.course2.model.fields.Field;
+import ru.vsu.cs.course2.model.actions.Actions;
+import ru.vsu.cs.course2.model.fields.BaseField;
 import ru.vsu.cs.course2.model.fields.StreetField;
 import ru.vsu.cs.course2.util.CircleList;
 
 import java.util.*;
 
 public class PrintService {
-    public boolean isGameOver(Queue<Player> players, CircleList<Field> fields, StreetService streetService, PlayerService playerService) {
+
+    public void printFields(CircleList<BaseField> fields) {
+        String reset = "\u001b[0m";
+        for (BaseField field : fields) {
+            if (field.getClass().getSimpleName().equals("StreetField")) {
+                StreetField streetField = (StreetField) field;
+                System.out.println(streetField.getColor() + streetField.getNumberOfField() + ". " + field.getName() + reset);
+            } else if (field.getClass().getSimpleName().equals("ActionField")) {
+                System.out.println(field.getNumberOfField() + ". " + field.getName());
+            } else if (field.getClass().getSimpleName().equals("BaseField")) {
+                System.out.println(field.getNumberOfField() + ". " + field.getName());
+            }
+        }
+    }
+
+    public void printPlayers(Queue<Player> players) {
+        int count = 0;
+        for (Player player : players) {
+            count++;
+            System.out.println(count + ". " + player.getPlayerName());
+        }
+
+    }
+
+    public boolean isGameOver(Queue<Player> players, CircleList<BaseField> fields, StreetService streetService, PlayerService playerService) {
         int countOfBankrupt = 0;
         Player winner = null;
         for (Player player : players) {
@@ -19,48 +44,15 @@ public class PrintService {
             }
         }
         if (countOfBankrupt >= (players.size() - 1)) {
-            endGame(players, fields, streetService, playerService);
+            playerService.endGame(players, fields, streetService);
             System.out.println("Победитель:" + winner.getPlayerName());
             return true;
         }
         return false;
     }
 
-    public void endGame(Queue<Player> players, CircleList<Field> fields, StreetService streetService, PlayerService playerService) {
-        int highAmountOfMoney = 0;
-        int count = 0;
-        Map<Integer, Player> rating = new HashMap<>();
-        for (Player player : players) {
-            for (Map.Entry<Player, Field> field : streetService.getAllStreets(player, fields).entrySet()) {
-                StreetField street = (StreetField) field.getValue();
-                if (street.isHotel()) {
-                    playerService.addMoney(player, street.getPrice().getPrice() + street.getPrice().getPriceForNewBuildings() * 4);
-                } else if (street.isHouse()) {
-                    playerService.addMoney(player, street.getPrice().getPriceForNewBuildings() + street.getPrice().getPrice());
-                } else {
-                    playerService.addMoney(player, street.getPrice().getPrice());
-                }
-            }
-            if (highAmountOfMoney == player.getMoney()) {
-                count++;
-                rating.put(count, player);
-            } else if (highAmountOfMoney < player.getMoney()) {
-                count = 1;
-                rating.put(count, player);
-                highAmountOfMoney = player.getMoney();
-            } else {
-                rating.put(rating.size(), player);
-            }
-        }
 
-        System.out.println("Рейтинг игроков: ");
-        for (int i = 0; i < count; i++) {
-            System.out.println(rating.get(i - 1).getPlayerName());
-        }
-        System.exit(0);
-    }
-
-    public void SellTheStreetField(Queue<Player> players, Player player, CircleList<Field> fields, PlayerService playerService) {
+    public void SellTheStreetField(Queue<Player> players, Player player, CircleList<BaseField> fields, PlayerService playerService) {
         String selection;
         boolean valueInput = false;
         StreetField chosenStreet = null;
@@ -71,8 +63,8 @@ public class PrintService {
         do {
             System.out.println("Выберите одно из ваших полей, чтобы продать их другому игроку: ");
             ArrayList<StreetField> playerStreets = null;
-            for (Field field : fields) {
-                StreetField sf = (StreetField) field;
+            for (BaseField baseField : fields) {
+                StreetField sf = (StreetField) baseField;
                 if (sf.getPlayer() == player) {
                     playerStreets.add(sf);
                 }
@@ -125,6 +117,63 @@ public class PrintService {
         System.out.println("Продано!");
     }
 
+    public String[] getMenuBeforeRound(CircleList<BaseField> fields, StreetService streetService) {
+        ArrayList<String> list = new ArrayList<>();
+
+        for (BaseField baseField : fields) {
+            if (baseField.getClass().getSimpleName().equals("StreetField")) {
+                StreetField street = (StreetField) baseField;
+                if (!(street.isHotel()) || !(street.isHouse())) {
+                    list.add("Купить дом или отель на одном из полей");
+                    break;
+                }
+            }
+        }
+        if (fields.size() > 0) {
+            list.add("Продать улицу");
+            list.add("Показать информацию о улице");
+        }
+        for (BaseField baseField : fields) {
+            if (baseField.getClass().getSimpleName().equals("StreetField")) {
+                StreetField street = (StreetField) baseField;
+                if (street.isHotel() || streetService.amountOfHouses(street) > 0) {
+                    list.add("Продать здания на поле");
+                    break;
+                }
+            }
+        }
+
+        list.add("Бросить кости");
+
+        return list.toArray(new String[list.size()]);
+    }
+
+    public int showMenuBeforeRound(Player player, String[] arrayOptions) {
+        System.out.println("Текущий игрок:" + player.getPlayerName());
+        System.out.println("Выберите, что вы хотите сделать: ");
+        String textFromConsole = null;
+        for (int i = 0; i < arrayOptions.length; i++) {
+            textFromConsole += (i + ") " + arrayOptions[i] + "\n");
+        }
+        return getTextValue(textFromConsole, 0, arrayOptions.length);
+    }
+
+    public int showFieldsMenu(Player player, String[] arrayOptions, BaseField baseField) {
+        System.out.println("Текущий игрок " + player.getPlayerName());
+        String textToShow = "[Поле " + baseField.getNumberOfField() + " - " + baseField.getName() + "]\n\nВыберите, что вы хотите сделать\n";
+        for (int i = 0; i < arrayOptions.length; i++) {
+            textToShow += (i + ") " + arrayOptions[i] + "\n");
+        }
+        return getTextValue(textToShow, 0, arrayOptions.length + 1);
+    }
+
+    public void notEnoughMoney(Queue<Player> players, CircleList<BaseField> fields, StreetService streetService, PlayerService playerService) {
+        System.out.println("У вас не хватает денег! Вы банкрот");
+        playerService.endGame(players, fields, streetService);
+        players.poll();
+    }
+
+
     public int getTextValue(String text, int min, int max) {
         Optional<String> result = null;
         String valueString = "";
@@ -160,60 +209,6 @@ public class PrintService {
         return textFromConsole;
     }
 
-    public String[] getMenuBeforeRound(CircleList<Field> fields, StreetService streetService) {
-        ArrayList<String> list = new ArrayList<>();
-
-        for (Field field : fields) {
-            if (field.getClass().getSimpleName().equals("StreetField")) {
-                StreetField street = (StreetField) field;
-                if (!(street.isHotel()) || !(street.isHouse())) {
-                    list.add("Купить дом или отель на одном из полей");
-                    break;
-                }
-            }
-        }
-        if (fields.size() > 0) {
-            list.add("Продать улицу");
-            list.add("Показать информацию о улице");
-        }
-        for (Field field : fields) {
-            if (field.getClass().getSimpleName().equals("StreetField")) {
-                StreetField street = (StreetField) field;
-                if (street.isHotel() || streetService.amountOfHouses(street) > 0) {
-                    list.add("Продать здания на поле");
-                    break;
-                }
-            }
-        }
-
-        list.add("Бросить кости");
-
-        return list.toArray(new String[list.size()]);
-    }
-
-    public int showMenuBeforeRound(Player player, String[] arrayOptions) {
-        System.out.println("Текущий игрок:" + player.getPlayerName());
-        System.out.println("Выберите, что вы хотите сделать: ");
-        String textFromConsole = null;
-        for (int i = 0; i < arrayOptions.length; i++) {
-            textFromConsole += (i + ") " + arrayOptions[i] + "\n");
-        }
-        return getTextValue(textFromConsole, 0, arrayOptions.length);
-    }
-    public int showFieldsMenu(Player player, String[] arrayOptions, Field field) {
-        System.out.println("Текущий игрок " + player.getPlayerName());
-        String textToShow = "[Поле " + field.getNumberOfField() + " - " + field.getName() + "]\n\nВыберите, что вы хотите сделать\n";
-        for (int i = 0; i < arrayOptions.length; i++) {
-            textToShow += (i + ") " + arrayOptions[i] + "\n");
-        }
-        return getTextValue(textToShow, 0, arrayOptions.length + 1);
-    }
-
-    public void notEnoughMoney(Queue<Player> players, CircleList<Field> fields, StreetService streetService, PlayerService playerService) {
-        System.out.println("У вас не хватает денег! Вы банкрот");
-        endGame(players, fields, streetService, playerService);
-        players.poll();
-    }
 
     public String[] printAvailable(String[] actions) {
 
@@ -224,6 +219,21 @@ public class PrintService {
         }
 
         return actions;
+
+    }
+
+    public void printField(int dice, CircleList<BaseField> fields, ArrayList<Actions> playerActions, Player player, ActionService actionService, StreetService streetService) {
+        if (streetService.searchField(dice + actionService.getNumberOfField(playerActions, player), fields).getClass().getSimpleName().equals("StreetField")) {
+            StreetField street = (StreetField) streetService.searchField(dice + actionService.getNumberOfField(playerActions, player), fields);
+            if (street.getPlayer() == null) {
+                System.out.println("Вам выпала улица: " + street.getName() + ", у которой нет владельца. Желаете ли вы ее купить?");
+            } else {
+                System.out.println("Вы передвинулись на улицу: " + street.getName() + ", у которой есть владелец. Вы должны заплатить арендную плату.");
+            }
+            playerActions.get(Integer.parseInt(player.getPlayerName())).getLocation().add(street);
+        } else if (streetService.searchField(dice + actionService.getNumberOfField(playerActions, player), fields).getClass().getSimpleName().equals("ActionField")) {
+            System.out.println("Вам выпало поле: " + streetService.searchField(dice + actionService.getNumberOfField(playerActions, player), fields).getName());
+        }
 
     }
 

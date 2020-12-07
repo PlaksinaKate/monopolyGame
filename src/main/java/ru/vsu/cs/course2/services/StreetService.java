@@ -1,21 +1,18 @@
 package ru.vsu.cs.course2.services;
 
 import ru.vsu.cs.course2.model.Player;
-import ru.vsu.cs.course2.model.fields.Field;
+import ru.vsu.cs.course2.model.actions.Actions;
+import ru.vsu.cs.course2.model.fields.ActionField;
+import ru.vsu.cs.course2.model.fields.BaseField;
 import ru.vsu.cs.course2.model.fields.StreetField;
 import ru.vsu.cs.course2.util.CircleList;
 
+import javax.swing.*;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class StreetService {
-    public Field searchField(String nameOfField, CircleList<Field> fields) {
-        for (Field field : fields) {
-            if (field.getName().equals(nameOfField)) {
-                return field;
-            }
-        }
-        return null;
-    }
+
     public int amountOfHouses(StreetField street) {
         int count = amountOfHouses(street);
         if (street.isHouse()) {
@@ -37,11 +34,24 @@ public class StreetService {
         }
     }
 
-    public Map<Player, Field> getAllStreets(Player player, CircleList<Field> fields) {
-        Map<Player, Field> ownProperty = null;
-        for (Field field : fields) {
-            if (field.getClass().getSimpleName().equals("StreetField")) {
-                StreetField sf = (StreetField) field;
+    public void payRent(StreetField streetField, Player player) {
+        if (!streetField.isHouse()) {
+            System.out.println("Заплатите аренду в размере:" + streetField.getPrice().getRentPrice().getRentPriceWithoutBuildings());
+            player.setMoney(player.getMoney() - streetField.getPrice().getRentPrice().getRentPriceWithoutBuildings());
+        } else if (streetField.isHouse() && !(streetField.isHotel())) {
+            System.out.println("Заплатите аренду в размере:" + streetField.getPrice().getRentPrice().getRentPriceWithHouse());
+            player.setMoney(player.getMoney() - streetField.getPrice().getRentPrice().getRentPriceWithHouse());
+        } else if (streetField.isHotel()) {
+            System.out.println("Заплатите аренду в размере:" + streetField.getPrice().getRentPrice().getRentPriceWithHotel());
+            player.setMoney(player.getMoney() - streetField.getPrice().getRentPrice().getRentPriceWithHotel());
+        }
+    }
+
+    public Map<Player, BaseField> getAllStreets(Player player, CircleList<BaseField> fields) {
+        Map<Player, BaseField> ownProperty = null;
+        for (BaseField baseField : fields) {
+            if (baseField.getClass().getSimpleName().equals("StreetField")) {
+                StreetField sf = (StreetField) baseField;
                 if (sf.getPlayer().equals(player) && sf.getClass().getSimpleName().equals("StreetField")) {
                     ownProperty.put(player, sf);
                 }
@@ -50,5 +60,4 @@ public class StreetService {
         }
         return ownProperty;
     }
-
 }

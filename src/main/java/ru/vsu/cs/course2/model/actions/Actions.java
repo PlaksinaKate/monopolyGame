@@ -1,22 +1,24 @@
 package ru.vsu.cs.course2.model.actions;
 
 import ru.vsu.cs.course2.model.Player;
-import ru.vsu.cs.course2.model.fields.Field;
+import ru.vsu.cs.course2.model.fields.BaseField;
+
+import java.util.ArrayList;
 
 public class Actions {
-    private Field location;
     private Player player;
+    private ArrayList<BaseField> location;
 
-    public Actions(Field location, Player player) {
-        this.location = location;
+    public Actions(Player player, ArrayList<BaseField> location) {
         this.player = player;
+        this.location = location;
     }
 
-    public Field getLocation() {
+    public ArrayList<BaseField> getLocation() {
         return location;
     }
 
-    public void setLocation(Field location) {
+    public void setLocation(ArrayList<BaseField> location) {
         this.location = location;
     }
 

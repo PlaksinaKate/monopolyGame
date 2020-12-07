@@ -5,19 +5,23 @@ import ru.vsu.cs.course2.model.price.Price;
 
 import java.awt.*;
 
-public class StreetField extends Field {
-    private Color color;
+public class StreetField extends BaseField {
+    private String color;
     private Player player;
     private Price price;
     private boolean hotel, house;
 
-    public StreetField(String name, int numberOfField, Color color, Player player, Price price, boolean hotel, boolean house) {
+    public StreetField(String name, int numberOfField, String color, Player player, Price price, boolean hotel, boolean house) {
         super(name, numberOfField);
         this.color = color;
         this.player = player;
         this.price = price;
         this.hotel = hotel;
         this.house = house;
+    }
+
+    public String getColor() {
+        return color;
     }
 
     public boolean isHotel() {

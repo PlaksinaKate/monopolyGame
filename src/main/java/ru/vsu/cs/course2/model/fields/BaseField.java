@@ -1,10 +1,10 @@
 package ru.vsu.cs.course2.model.fields;
 
-public class Field  {
+public class BaseField {
     private String name;
     private int numberOfField;
 
-    public Field(String name, int numberOfField) {
+    public BaseField(String name, int numberOfField) {
         this.name = name;
         this.numberOfField = numberOfField;
     }

@@ -1,11 +1,11 @@
 package ru.vsu.cs.course2.model.cards;
 
-public class Treasury extends Cards{
-    private int moneyPlusOrMinus;
+public class Treasury extends BaseCard {
+    private int money;
 
-    public Treasury(String text, int moneyPlusOrMinus) {
+    public Treasury(String text, int money) {
         super(text);
-        this.moneyPlusOrMinus = moneyPlusOrMinus;
+        this.money = money;
     }
 }
 

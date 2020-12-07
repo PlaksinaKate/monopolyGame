@@ -19,7 +19,7 @@ public class CircleList<T> implements Iterable<T> {
             Element element = new Element(null, value);
             tail.next = element;
             tail = element;
-            element.next = head;
+            //element.next = head;
         }
     }
 
@@ -40,11 +40,9 @@ public class CircleList<T> implements Iterable<T> {
 
             @Override
             public boolean hasNext() {
-                if (el != tail)
-                    return el != null;
-                else
-                    return false;
+                return el.next != null;
             }
+
 
             @Override
             public T next() {

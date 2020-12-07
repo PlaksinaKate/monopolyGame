@@ -1,12 +1,16 @@
 package ru.vsu.cs.course2.model.cards;
 
-import ru.vsu.cs.course2.model.fields.Field;
+import ru.vsu.cs.course2.model.fields.BaseField;
 
-public class Chance extends Cards{
-    private Field numberOfFieldWherePlayerNeedToGo;
+public class Chance extends BaseCard {
+    private int numberOfField;
 
-    public Chance(String text, Field numberOfFieldWherePlayerNeedToGo) {
+    public Chance(String text, int field) {
         super(text);
-        this.numberOfFieldWherePlayerNeedToGo = numberOfFieldWherePlayerNeedToGo;
+        this.numberOfField = numberOfField;
+    }
+
+    public int getNumberOfField() {
+        return numberOfField;
     }
 }

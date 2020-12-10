@@ -9,6 +9,8 @@ import ru.vsu.cs.course2.util.CircleList;
 import java.util.*;
 
 public class PlayerService {
+    private ActionService actionService;
+
     public void addMoney(Player player, int money) {
         int playersMoney = player.getMoney() + money;
         player.setMoney(playersMoney);
@@ -44,7 +46,7 @@ public class PlayerService {
         }
     }
 
-    public void checkStart(Player player, int diceValue, ArrayList<Actions> playerAction, ActionService actionService) {
+    public void checkStart(Player player, int diceValue, ArrayList<Actions> playerAction) {
         if ((actionService.getNumberOfField(playerAction, player) + diceValue) > 35) {
             player.setMoney(player.getMoney() + 200);
         }

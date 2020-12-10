@@ -11,19 +11,14 @@ import java.util.ArrayList;
 import java.util.Queue;
 
 public class ChanceService {
-    ActionService actionService;
-    FieldService fieldService;
-    StreetService streetService;
+    private StreetService streetService;
+    private FieldService fieldService;
+    private PlayerService playerService;
+    private ActionService actionService;
 
-    public ChanceService() {
-        actionService = new ActionService();
-        fieldService = new FieldService();
-        streetService = new StreetService();
-    }
-
-    public void chance(Player player, ArrayList<Actions> playerAction, Queue<Chance> chance, CircleList<BaseField> fields) {
+    public void chance(Player player, ArrayList<Actions> playerAction, Queue<Chance> chance, CircleList<BaseField> fields, String answer, int dice, Queue<Player> players) {
         System.out.println(chance.peek().getText());
-        System.out.println("Игрок:" + player + " отправляется на поле под номером: " + chance.peek().getNumberOfField());
+        System.out.println("Игрок:" + player.getPlayerName() + " отправляется на поле под номером: " + chance.peek().getNumberOfField());
         actionService.addAction(player, playerAction, fieldService.searchField(chance.peek().getNumberOfField(), fields));
         if (fieldService.searchField(chance.peek().getNumberOfField(), fields).getClass().getSimpleName().equals("StreetField")) {
             StreetField streetField = (StreetField) fieldService.searchField(chance.peek().getNumberOfField(), fields);
@@ -32,7 +27,17 @@ public class ChanceService {
                 streetService.payRent(streetField, player);
             } else if (streetField.getPlayer() == null) {
                 System.out.println("Вы можете купить эту улицу");
+                if (answer == "Да") {
+                    System.out.println("Я хочу ее купить!");
+                    streetService.buyStreet(player, streetField);
+                } else if (answer == "Нет") {
+                    System.out.println("Я не хочу ее покупать!");
+                }
             }
+        } else if (fieldService.searchField(chance.peek().getNumberOfField(), fields).getClass().getSimpleName().equals("BaseField")) {
+            System.out.println("Вы на старте!");
+            playerService.checkStart(players.peek(), dice, playerAction);
+
         }
         chance.add(chance.poll());
     }

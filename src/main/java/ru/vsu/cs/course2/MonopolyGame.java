@@ -5,6 +5,7 @@ import ru.vsu.cs.course2.model.actions.Actions;
 import ru.vsu.cs.course2.model.cards.Chance;
 import ru.vsu.cs.course2.model.cards.Treasury;
 import ru.vsu.cs.course2.model.fields.BaseField;
+import ru.vsu.cs.course2.services.FieldService;
 import ru.vsu.cs.course2.services.InfoService;
 import ru.vsu.cs.course2.services.MonopolyService;
 import ru.vsu.cs.course2.services.StreetService;
@@ -21,7 +22,7 @@ public class MonopolyGame {
     private Queue<Player> players;
     private Map<Player, BaseField> ownFields;
     private ArrayList<Actions> playerActions;
-    private StreetService streetService;
+    private FieldService fieldService;
     private MonopolyService monopolyService;
 
     public MonopolyGame() {
@@ -32,14 +33,14 @@ public class MonopolyGame {
         players = new LinkedList<>();
         ownFields = new HashMap<>();
         playerActions = new ArrayList<>();
-        streetService = new StreetService();
+        fieldService = new FieldService();
         monopolyService = new MonopolyService();
     }
 
     public void setUpMonopoly() {
         infoService.addFields(fields);
         infoService.addTreasury(treasury, players);
-        infoService.addChance(chance, fields, streetService);
+        infoService.addChance(chance, fields, fieldService);
         infoService.addPlayers(players);
     }
 

@@ -15,12 +15,18 @@ public class MonopolyService {
     private PlayerService playerService;
     private ActionService actionService;
     private PrintService printService;
+    private FieldService fieldService;
+    private ChanceService chanceService;
+    private TreasuryService treasuryService;
 
     public MonopolyService() {
         streetService = new StreetService();
         playerService = new PlayerService();
         actionService = new ActionService();
         printService = new PrintService();
+        fieldService = new FieldService();
+        chanceService = new ChanceService();
+        treasuryService = new TreasuryService();
     }
 
     public void playMonopoly(CircleList<BaseField> fields, Queue<Treasury> treasury, Queue<Chance> chance, Queue<Player> players, Map<Player, BaseField> ownProperty, ArrayList<Actions> playerActions) {
@@ -45,105 +51,44 @@ public class MonopolyService {
         System.out.println();
 
         System.out.println();
-//        boolean ifEndTurn = false;
-//        String[] options;
-//        int selection;
         actionService.startLocation(playerActions, players, fields);
         while (!printService.isGameOver(players, fields, streetService, playerService)) {
             System.out.println("Ход игрока: " + players.peek().getPlayerName());
             int dice = actionService.dice();
-            playerService.checkStart(players.peek(), dice, playerActions, actionService);
+            playerService.checkStart(players.peek(), dice, playerActions);
             printService.printField(dice, fields, playerActions, players.peek(), actionService, streetService);
+            fieldService.checkField(fieldService.searchField(actionService.getNumberOfField(playerActions, players.peek()) + dice, fields), "Да", players.peek(), playerActions, chance, fields, treasury, dice, players);
             System.out.println();
             players.add(players.poll());
-//            for (Player player : players) {
-//
-//                if (ownProperty.get(player) != null) {
-//                    ifEndTurn = false;
-//                    int counter = 0;
-//                    while (!ifEndTurn) {
-//                        options = printService.getMenuBeforeRound(fields, streetService);
-//                        selection = printService.showMenuBeforeRound(player, options);
-//                        switch (options[selection]) {
-////                            case "Купить дом или отель":
-////                                if (MonopolyProcess.amountOfHouses(fields) < 3) {
-////                                    if (MonopolyProcess.buyHouse(player, street))
-////                                        counter++;
-////                                } else {
-////                                    MonopolyProcess.buyHotel(player, street);
-////                                }
-////                                break;
-//                            case "0 - Продать улицу":
-//                                printService.SellTheStreetField(players, player, fields, playerService);
-//                                break;
-////                            case "Продать дом":
-////                                showMenuSellTheHouses();
-////                                break;
-//                            case "1 - Бросить кости":
-//                                ifEndTurn = true;
-//                                break;
-//                        }
-//                    }
-//
-//                }
-//                System.out.println("Передвиньтесь, пожалуйста, на " + actionService.dice() + " клеток.");
-//                if (playerService.giveMoneyForStart(player, playerActions.get(playerActions.indexOf(player)), actionService.dice(), fields)) {
-//                    System.out.println("Вы получили деньги за прохождение одного круга!");
-//                    playerService.giveMoneyAfterStart(player);
-//                }
-//                ifEndTurn = false;
-//                while (!ifEndTurn) {
-//                    if (playerActions.get(playerActions.indexOf(player)).getLocation().getClass().getSimpleName().equals("StreetField")) {
-//                        StreetField street = (StreetField) playerActions.get(playerActions.indexOf(player)).getLocation();
-//                        if (street.getPlayer() == null) {
-//                            System.out.println("Выберите, пожалуйста, что вы хотите сделать с этим полем:");
-//
-//                            options = printService.getMenuBeforeRound(fields, streetService);
-//                            selection = printService.showMenuBeforeRound(player, options);
-//
-//                            switch (options[selection]) {
-//                                case "Купить улицу":
-//                                    streetService.buyStreet(player, street);
-//                                    break;
-//                                case "Конец хода":
-//                                    ifEndTurn = true;
-//                                    break;
-//                                case "Конец игры":
-//                                    playerService.endGame(players, fields, streetService);
-//                                    break;
-//                            }
-//                        } else {
-//                            System.out.println("Вы должны заплатить ренту");
-//
-//                            if (street.isHouse()) {
-//                                if (player.getMoney() < street.getPrice().getRentPrice().getRentPriceWithHouse() * streetService.amountOfHouses(street))
-//                                    printService.notEnoughMoney(players, fields, streetService, playerService);
-//                                else
-//                                    playerService.minMoney(player, street.getPrice().getRentPrice().getRentPriceWithHouse() * streetService.amountOfHouses(street));
-//
-//                            } else if (street.isHotel()) {
-//                                if (player.getMoney() < street.getPrice().getRentPrice().getRentPriceWithHotel())
-//                                    printService.notEnoughMoney(players, fields, streetService, playerService);
-//                                else
-//                                    playerService.minMoney(player, street.getPrice().getRentPrice().getRentPriceWithHotel());
-//
-//                            } else {
-//                                if (player.getMoney() < street.getPrice().getRentPrice().getRentPriceWithoutBuildings())
-//                                    printService.notEnoughMoney(players, fields, streetService, playerService);
-//                                else
-//                                    playerService.minMoney(player, street.getPrice().getRentPrice().getRentPriceWithoutBuildings());
-//                            }
-//
-//
-//                        }
-//                    } else if (playerActions.get(playerActions.indexOf(player)).getLocation().getClass().getSimpleName().equals("ActionField")) {
-//
-//                    }
-//                }
-            //}
         }
     }
 
+    public StreetService getStreetService() {
+        return streetService;
+    }
 
+    public PlayerService getPlayerService() {
+        return playerService;
+    }
+
+    public ActionService getActionService() {
+        return actionService;
+    }
+
+    public PrintService getPrintService() {
+        return printService;
+    }
+
+    public FieldService getFieldService() {
+        return fieldService;
+    }
+
+    public ChanceService getChanceService() {
+        return chanceService;
+    }
+
+    public TreasuryService getTreasuryService() {
+        return treasuryService;
+    }
 }
 

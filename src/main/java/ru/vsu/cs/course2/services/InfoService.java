@@ -16,6 +16,7 @@ import java.util.Queue;
 import java.util.Stack;
 
 public class InfoService {
+
     public void addFields(CircleList<BaseField> field) {
         field.add(new BaseField("Старт", 1));
         field.add(new StreetField("Старая дорога", 2, "\u001b[37m", null, new Price(60, 50, new RentPrice(2, 10, 250)), false, false));
@@ -37,13 +38,13 @@ public class InfoService {
         field.add(new StreetField("Морские перевозки", 19, "\u001b[34m", null, new Price(300, 200, new RentPrice(26, 130, 1275)), false, false));
         field.add(new StreetField("Железная дорога", 20, "\u001b[34m", null, new Price(300, 200, new RentPrice(26, 130, 1275)), false, false));
         field.add(new ActionField("Казна", 21));
-        field.add(new StreetField("Авиакомпания", 22,"\u001b[34m", null, new Price(320, 200, new RentPrice(28, 150, 1400)), false, false));
+        field.add(new StreetField("Авиакомпания", 22, "\u001b[34m", null, new Price(320, 200, new RentPrice(28, 150, 1400)), false, false));
         field.add(new StreetField("Улица Пушкина", 24, "\u001b[36m", null, new Price(180, 100, new RentPrice(14, 70, 950)), false, false));
         field.add(new ActionField("Казна", 25));
         field.add(new StreetField("Проспект мира", 26, "\u001b[36m", null, new Price(180, 100, new RentPrice(14, 70, 950)), false, false));
-        field.add(new StreetField("Проспект победы", 27,"\u001b[36m", null, new Price(200, 100, new RentPrice(16, 80, 1000)), false, false));
+        field.add(new StreetField("Проспект победы", 27, "\u001b[36m", null, new Price(200, 100, new RentPrice(16, 80, 1000)), false, false));
         field.add(new ActionField("Бесплатная парковка", 28));
-        field.add(new StreetField("Бар", 29,"\u001b[31m", null, new Price(220, 150, new RentPrice(18, 90, 1050)), false, false));
+        field.add(new StreetField("Бар", 29, "\u001b[31m", null, new Price(220, 150, new RentPrice(18, 90, 1050)), false, false));
         field.add(new ActionField("Шанс", 30));
         field.add(new StreetField("Ночной клуб", 31, "\u001b[31m", null, new Price(220, 150, new RentPrice(20, 110, 1070)), false, false));
         field.add(new StreetField("Ресторан", 32, "\u001b[31m", null, new Price(240, 150, new RentPrice(22, 120, 1200)), false, false));
@@ -69,14 +70,14 @@ public class InfoService {
         treasury.add(new Treasury("Оплата услуг доктора", -50));
     }
 
-    public void addChance(Queue<Chance> chance, CircleList<BaseField> field, StreetService streetService) {
-        chance.add(new Chance("Отправляйтесь в гостиничный комплекс", streetService.searchField(35, field)));
-        chance.add(new Chance("Пройдите на старт", streetService.searchField(1, field)));
-        chance.add(new Chance("Освобождение из тюрьмы", null));
-        chance.add(new Chance("Отправляйтесь в ресторан", streetService.searchField(32, field)));
-        chance.add(new Chance("Отправляйтесь в бар", streetService.searchField(29, field)));
-        chance.add(new Chance("Отправляйтесь в аквапарк", streetService.searchField(6, field)));
-        chance.add(new Chance("Отправляйтесь в тюрьму", streetService.searchField(10, field)));
+    public void addChance(Queue<Chance> chance, CircleList<BaseField> field, FieldService fieldService) {
+        chance.add(new Chance("Отправляйтесь в гостиничный комплекс", 35));
+        chance.add(new Chance("Пройдите на старт", 1));
+        chance.add(new Chance("Освобождение из тюрьмы", 0));
+        chance.add(new Chance("Отправляйтесь в ресторан", 32));
+        chance.add(new Chance("Отправляйтесь в бар", 29));
+        chance.add(new Chance("Отправляйтесь в аквапарк", 6));
+        chance.add(new Chance("Отправляйтесь в тюрьму", 10));
     }
 
     public void addPlayers(Queue<Player> players) {

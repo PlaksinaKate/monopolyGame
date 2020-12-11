@@ -70,7 +70,7 @@ public class InfoService {
         treasury.add(new Treasury("Оплата услуг доктора", -50));
     }
 
-    public void addChance(Queue<Chance> chance, CircleList<BaseField> field, FieldService fieldService) {
+    public void addChance(Queue<Chance> chance) {
         chance.add(new Chance("Отправляйтесь в гостиничный комплекс", 35));
         chance.add(new Chance("Пройдите на старт", 1));
         chance.add(new Chance("Освобождение из тюрьмы", 0));

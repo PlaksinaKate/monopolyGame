@@ -11,25 +11,13 @@ import ru.vsu.cs.course2.util.CircleList;
 import java.util.*;
 
 public class MonopolyService {
-    private StreetService streetService;
-    private PlayerService playerService;
-    private ActionService actionService;
-    private PrintService printService;
-    private FieldService fieldService;
-    private ChanceService chanceService;
-    private TreasuryService treasuryService;
+    private StreetService streetService = new StreetService();
+    private PlayerService playerService = new PlayerService();
+    private ActionService actionService = new ActionService();
+    private PrintService printService = new PrintService();
+    private FieldService fieldService = new FieldService();
 
-    public MonopolyService() {
-        streetService = new StreetService();
-        playerService = new PlayerService();
-        actionService = new ActionService();
-        printService = new PrintService();
-        fieldService = new FieldService();
-        chanceService = new ChanceService();
-        treasuryService = new TreasuryService();
-    }
-
-    public void playMonopoly(CircleList<BaseField> fields, Queue<Treasury> treasury, Queue<Chance> chance, Queue<Player> players, Map<Player, BaseField> ownProperty, ArrayList<Actions> playerActions) {
+    public void playMonopoly(CircleList<BaseField> fields, Queue<Treasury> treasury, Queue<Chance> chance, Queue<Player> players, ArrayList<Actions> playerActions) {
         System.out.println("Игра началась");
         System.out.println("Поля:");
 
@@ -54,41 +42,14 @@ public class MonopolyService {
         actionService.startLocation(playerActions, players, fields);
         while (!printService.isGameOver(players, fields, streetService, playerService)) {
             System.out.println("Ход игрока: " + players.peek().getPlayerName());
-            int dice = actionService.dice();
-            playerService.checkStart(players.peek(), dice, playerActions);
-            printService.printField(dice, fields, playerActions, players.peek(), actionService, streetService);
-            fieldService.checkField(fieldService.searchField(actionService.getNumberOfField(playerActions, players.peek()) + dice, fields), "Да", players.peek(), playerActions, chance, fields, treasury, dice, players);
+            int numberOfField = actionService.getNumberOfField(playerActions, players.peek()) + actionService.dice();
+            numberOfField = playerService.checkStart(players.peek(), numberOfField);
+            printService.printField(numberOfField, fields, playerActions, players.peek());
+            fieldService.checkField(fieldService.searchField(numberOfField, fields), "Да", players.peek(), playerActions, chance, fields, treasury, numberOfField, players);
             System.out.println();
             players.add(players.poll());
         }
     }
 
-    public StreetService getStreetService() {
-        return streetService;
-    }
-
-    public PlayerService getPlayerService() {
-        return playerService;
-    }
-
-    public ActionService getActionService() {
-        return actionService;
-    }
-
-    public PrintService getPrintService() {
-        return printService;
-    }
-
-    public FieldService getFieldService() {
-        return fieldService;
-    }
-
-    public ChanceService getChanceService() {
-        return chanceService;
-    }
-
-    public TreasuryService getTreasuryService() {
-        return treasuryService;
-    }
 }
 

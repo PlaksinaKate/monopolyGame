@@ -15,36 +15,32 @@ import javax.management.Query;
 import java.util.*;
 
 public class MonopolyGame {
-    private InfoService infoService;
+    private InfoService infoService = new InfoService();
     private CircleList<BaseField> fields;
     private Queue<Treasury> treasury;
     private Queue<Chance> chance;
     private Queue<Player> players;
     private Map<Player, BaseField> ownFields;
     private ArrayList<Actions> playerActions;
-    private FieldService fieldService;
-    private MonopolyService monopolyService;
 
     public MonopolyGame() {
-        infoService = new InfoService();
         fields = new CircleList<>();
         treasury = new LinkedList<>();
         chance = new LinkedList<>();
         players = new LinkedList<>();
         ownFields = new HashMap<>();
         playerActions = new ArrayList<>();
-        fieldService = new FieldService();
-        monopolyService = new MonopolyService();
     }
 
     public void setUpMonopoly() {
         infoService.addFields(fields);
         infoService.addTreasury(treasury, players);
-        infoService.addChance(chance, fields, fieldService);
+        infoService.addChance(chance);
         infoService.addPlayers(players);
     }
 
     public void playGame() {
-        monopolyService.playMonopoly(fields, treasury, chance, players, ownFields, playerActions);
+        MonopolyService monopolyService = new MonopolyService();
+        monopolyService.playMonopoly(fields, treasury, chance, players, playerActions);
     }
 }

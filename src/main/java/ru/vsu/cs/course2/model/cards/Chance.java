@@ -1,11 +1,9 @@
 package ru.vsu.cs.course2.model.cards;
 
-import ru.vsu.cs.course2.model.fields.BaseField;
-
 public class Chance extends BaseCard {
     private int numberOfField;
 
-    public Chance(String text, int field) {
+    public Chance(String text, int numberOfField) {
         super(text);
         this.numberOfField = numberOfField;
     }

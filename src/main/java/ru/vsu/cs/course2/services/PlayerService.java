@@ -9,7 +9,7 @@ import ru.vsu.cs.course2.util.CircleList;
 import java.util.*;
 
 public class PlayerService {
-    private ActionService actionService;
+    private ActionService actionService = new ActionService();
 
     public void addMoney(Player player, int money) {
         int playersMoney = player.getMoney() + money;
@@ -46,10 +46,13 @@ public class PlayerService {
         }
     }
 
-    public void checkStart(Player player, int diceValue, ArrayList<Actions> playerAction) {
-        if ((actionService.getNumberOfField(playerAction, player) + diceValue) > 35) {
+    public int checkStart(Player player, int numberOfField) {
+        if (numberOfField > 35) {
             player.setMoney(player.getMoney() + 200);
+            numberOfField -= 35;
+            return numberOfField;
         }
+        return numberOfField;
     }
 
 

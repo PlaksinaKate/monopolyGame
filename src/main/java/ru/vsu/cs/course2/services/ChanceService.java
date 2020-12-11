@@ -11,12 +11,12 @@ import java.util.ArrayList;
 import java.util.Queue;
 
 public class ChanceService {
-    private StreetService streetService;
-    private FieldService fieldService;
-    private PlayerService playerService;
-    private ActionService actionService;
+    private StreetService streetService = new StreetService();
+    private PlayerService playerService = new PlayerService();
+    private ActionService actionService = new ActionService();
 
-    public void chance(Player player, ArrayList<Actions> playerAction, Queue<Chance> chance, CircleList<BaseField> fields, String answer, int dice, Queue<Player> players) {
+    public void chance(Player player, ArrayList<Actions> playerAction, Queue<Chance> chance, CircleList<BaseField> fields, String answer, int numberOfField, Queue<Player> players) {
+        FieldService fieldService = new FieldService();
         System.out.println(chance.peek().getText());
         System.out.println("Игрок:" + player.getPlayerName() + " отправляется на поле под номером: " + chance.peek().getNumberOfField());
         actionService.addAction(player, playerAction, fieldService.searchField(chance.peek().getNumberOfField(), fields));
@@ -36,7 +36,7 @@ public class ChanceService {
             }
         } else if (fieldService.searchField(chance.peek().getNumberOfField(), fields).getClass().getSimpleName().equals("BaseField")) {
             System.out.println("Вы на старте!");
-            playerService.checkStart(players.peek(), dice, playerAction);
+            playerService.checkStart(players.peek(),numberOfField);
 
         }
         chance.add(chance.poll());

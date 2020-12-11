@@ -119,7 +119,7 @@ public class ActionService {
         return value;
     }
 
-    public void addAction(Player player, ArrayList<Actions> playerAction,BaseField field) {
+    public void addAction(Player player, ArrayList<Actions> playerAction, BaseField field) {
         for (int i = 0; i < playerAction.size(); i++) {
             if (playerAction.get(i).getPlayer() == player) {
                 playerAction.get(i).getLocation().add(field);

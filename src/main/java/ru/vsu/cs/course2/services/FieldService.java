@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import java.util.Queue;
 
 public class FieldService {
-    private StreetService streetService;
-    private ChanceService chanceService;
-    private TreasuryService treasuryService;
+     private StreetService streetService=new StreetService();
+     private TreasuryService treasuryService=new TreasuryService();
 
-    public void checkField(BaseField field, String answer, Player player, ArrayList<Actions> playerAction, Queue<Chance> chance, CircleList<BaseField> fields, Queue<Treasury> treasury, int dice, Queue<Player> players) {
+    public void checkField(BaseField field, String answer, Player player, ArrayList<Actions> playerAction, Queue<Chance> chance, CircleList<BaseField> fields, Queue<Treasury> treasury, int numberOfField, Queue<Player> players) {
+       ChanceService chanceService = new ChanceService();
         if (field.getClass().getSimpleName().equals("StreetField")) {
             StreetField street = (StreetField) field;
             if (street.getPlayer() == null && answer == "Да") {
@@ -27,7 +27,7 @@ public class FieldService {
             }
         } else if (field.getClass().getSimpleName().equals("ActionField")) {
             if (field.getName() == "Шанс") {
-                chanceService.chance(player, playerAction, chance, fields, answer, dice, players);
+                chanceService.chance(player, playerAction, chance, fields, answer, numberOfField, players);
             } else if (field.getName() == "Казна") {
                 treasuryService.treasury(treasury, player);
             }

@@ -9,11 +9,8 @@ import ru.vsu.cs.course2.util.CircleList;
 import java.util.*;
 
 public class PrintService {
-    FieldService fieldService;
+    private FieldService fieldService = new FieldService();
 
-    public PrintService() {
-        fieldService = new FieldService();
-    }
 
     public void printFields(CircleList<BaseField> fields) {
         String reset = "\u001b[0m";
@@ -227,26 +224,24 @@ public class PrintService {
 
     }
 
-    public void printField(int dice, CircleList<BaseField> fields, ArrayList<Actions> playerActions, Player player, ActionService actionService, StreetService streetService) {
-        if (fieldService.searchField(dice + actionService.getNumberOfField(playerActions, player), fields).getClass().getSimpleName().equals("StreetField")) {
-            StreetField street = (StreetField) fieldService.searchField(dice + actionService.getNumberOfField(playerActions, player), fields);
+    public void printField(int numberOfField, CircleList<BaseField> fields, ArrayList<Actions> playerActions, Player player) {
+        if (fieldService.searchField(numberOfField, fields).getClass().getSimpleName().equals("StreetField")) {
+            StreetField street = (StreetField) fieldService.searchField(numberOfField, fields);
             if (street.getPlayer() == null) {
                 System.out.println("Вам выпала улица: " + street.getName() + ", у которой нет владельца. Желаете ли вы ее купить?");
             } else {
                 System.out.println("Вы передвинулись на улицу: " + street.getName() + ", у которой есть владелец. Вы должны заплатить арендную плату.");
             }
             for (int i = 0; i < playerActions.size(); i++) {
-                if(playerActions.get(i).getPlayer() == player){
+                if (playerActions.get(i).getPlayer() == player) {
                     playerActions.get(i).getLocation().add(street);
                     break;
                 }
             }
-        } else if (fieldService.searchField(dice + actionService.getNumberOfField(playerActions, player), fields).getClass().getSimpleName().equals("ActionField")) {
-            System.out.println("Вам выпало поле: " + fieldService.searchField(dice + actionService.getNumberOfField(playerActions, player), fields).getName());
+        } else if (fieldService.searchField(numberOfField, fields).getClass().getSimpleName().equals("ActionField")) {
+            System.out.println("Вам выпало поле: " + fieldService.searchField(numberOfField, fields).getName());
         }
     }
-
-
 
 
 }

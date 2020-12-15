@@ -39,7 +39,7 @@ public class PrintService {
         int countOfBankrupt = 0;
         Player winner = null;
         for (Player player : players) {
-            if (player.getMoney() == 0) {
+            if (player.getMoney() < 0) {
                 countOfBankrupt++;
             } else {
                 winner = player;
@@ -52,6 +52,8 @@ public class PrintService {
         }
         return false;
     }
+
+
 
 
     public void SellTheStreetField(Queue<Player> players, Player player, CircleList<BaseField> fields, PlayerService playerService) {

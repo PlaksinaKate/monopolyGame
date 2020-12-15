@@ -13,13 +13,12 @@ public class CircleList<T> implements Iterable<T> {
 
     public void add(T value) {
         if (head == null) {
-            head = new Element(null, value);
+            head = new Element(null, tail, value);
             tail = head;
         } else {
-            Element element = new Element(null, value);
+            Element element = new Element(null, tail, value);
             tail.next = element;
             tail = element;
-            //element.next = head;
         }
     }
 
@@ -40,18 +39,15 @@ public class CircleList<T> implements Iterable<T> {
 
             @Override
             public boolean hasNext() {
-                return el.next != null;
+                return el != tail.next;
             }
 
 
             @Override
             public T next() {
-                if (hasNext()) {
-                    T data = (T) el.value;
-                    el = el.next;
-                    return data;
-                }
-                return null;
+                T data = (T) el.value;
+                el = el.next;
+                return data;
             }
         };
 
@@ -60,11 +56,13 @@ public class CircleList<T> implements Iterable<T> {
 
     class Element<T> {
         Element next;
+        Element prev;
         T value;
 
-        public Element(Element next, T value) {
+        public Element(Element next, Element prev, T value) {
             this.next = next;
             this.value = value;
+            this.prev = prev;
         }
 
     }

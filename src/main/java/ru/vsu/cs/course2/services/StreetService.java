@@ -9,6 +9,7 @@ import ru.vsu.cs.course2.util.CircleList;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class StreetService {
@@ -24,6 +25,15 @@ public class StreetService {
         return count;
     }
 
+    public void buyHouse(Player player, StreetField streetField) {
+        player.setMoney(player.getMoney() - streetField.getPrice().getPriceForNewBuildings());
+        streetField.setHouse(true);
+    }
+
+    public void buyHotel(Player player, StreetField streetField) {
+        player.setMoney(player.getMoney() - streetField.getPrice().getPriceForNewBuildings());
+        streetField.setHotel(true);
+    }
 
     public void buyStreet(Player player, StreetField streetField) {
         if (streetField.getPlayer() == null) {
@@ -48,7 +58,7 @@ public class StreetService {
     }
 
     public Map<Player, BaseField> getAllStreets(Player player, CircleList<BaseField> fields) {
-        Map<Player, BaseField> ownProperty = null;
+        Map<Player, BaseField> ownProperty = new HashMap<>();
         for (BaseField baseField : fields) {
             if (baseField.getClass().getSimpleName().equals("StreetField")) {
                 StreetField sf = (StreetField) baseField;
@@ -59,5 +69,55 @@ public class StreetService {
 
         }
         return ownProperty;
+    }
+
+    public void street(StreetField street, int answer, Player player, int answer2) {
+        if (street.getPlayer() == null) {
+            if (answer == 1) {
+                System.out.println("Да, я ее покупаю");
+                buyStreet(player, street);
+            } else {
+                System.out.println("Нет, я не хочу покупать");
+            }
+        } else if (street.getPlayer() != null && street.getPlayer() != player) {
+            payRent(street, player);
+        } else if (street.getPlayer() == player) {
+            if (!street.isHouse()) {
+                System.out.println("Хотите купить дом?");
+                if (answer == 0) {
+                    System.out.println("Нет, я не хочу покупать");
+                    System.out.println("Хотите продать улицу? ");
+                    sellStreet(street, player, answer2);
+                } else if (answer == 1) {
+                    System.out.println("Да, я покупаю");
+                    buyHouse(player, street);
+                }
+            } else if (!street.isHotel()) {
+                System.out.println("Хотите купить отель?");
+                if (answer == 0) {
+                    System.out.println("Нет, я не хочу покупать");
+                    System.out.println("Хотите продать улицу? ");
+                    sellStreet(street, player, answer2);
+                } else if (answer == 1) {
+                    System.out.println("Да, я покупаю");
+                    buyHotel(player, street);
+                }
+            }
+        }
+    }
+
+    public void sellStreet(StreetField street, Player player, int answer2) {
+        if (answer2 == 1) {
+            System.out.println("Да, хочу");
+            if (street.isHotel()) {
+                player.setMoney(player.getMoney() - street.getPrice().getPriceForNewBuildings() * 2 - street.getPrice().getPrice());
+            } else if (street.isHouse()) {
+                player.setMoney(player.getMoney() - street.getPrice().getPriceForNewBuildings() - street.getPrice().getPrice());
+            } else {
+                player.setMoney(player.getMoney() - street.getPrice().getPrice());
+            }
+        } else if (answer2 == 0) {
+            System.out.println("Нет, не хочу");
+        }
     }
 }

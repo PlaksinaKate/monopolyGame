@@ -47,14 +47,13 @@ public class PlayerService {
     }
 
     public int checkStart(Player player, int numberOfField) {
-        if (numberOfField > 35) {
+        if (numberOfField > 33) {
             player.setMoney(player.getMoney() + 200);
-            numberOfField -= 35;
+            numberOfField -= 33;
             return numberOfField;
         }
         return numberOfField;
     }
-
 
     public void endGame(Queue<Player> players, CircleList<BaseField> fields, StreetService streetService) {
         int highAmountOfMoney = 0;

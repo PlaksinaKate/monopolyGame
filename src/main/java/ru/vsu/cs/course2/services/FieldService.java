@@ -12,24 +12,26 @@ import java.util.ArrayList;
 import java.util.Queue;
 
 public class FieldService {
-     private StreetService streetService=new StreetService();
-     private TreasuryService treasuryService=new TreasuryService();
+    private StreetService streetService = new StreetService();
+    private TreasuryService treasuryService = new TreasuryService();
 
-    public void checkField(BaseField field, String answer, Player player, ArrayList<Actions> playerAction, Queue<Chance> chance, CircleList<BaseField> fields, Queue<Treasury> treasury, int numberOfField, Queue<Player> players) {
-       ChanceService chanceService = new ChanceService();
+    public void checkField(BaseField field, int answer2, int answer, Player player, ArrayList<Actions> playerAction, Queue<Chance> chance, CircleList<BaseField> fields, Queue<Treasury> treasury, int numberOfField, Queue<Player> players) {
+        ChanceService chanceService = new ChanceService();
         if (field.getClass().getSimpleName().equals("StreetField")) {
             StreetField street = (StreetField) field;
-            if (street.getPlayer() == null && answer == "Да") {
-                System.out.println("Да, я ее покупаю");
-                streetService.buyStreet(player, street);
-            } else if (street.getPlayer() != null) {
-                streetService.payRent(street, player);
-            }
+            streetService.street(street, answer, player, answer2);
         } else if (field.getClass().getSimpleName().equals("ActionField")) {
             if (field.getName() == "Шанс") {
-                chanceService.chance(player, playerAction, chance, fields, answer, numberOfField, players);
+                chanceService.chance(player, playerAction, chance, fields, answer, numberOfField, players, answer2);
             } else if (field.getName() == "Казна") {
                 treasuryService.treasury(treasury, player);
+            }
+        } else if (field.getClass().getSimpleName().equals("BaseField")) {
+            if (field.getNumberOfField() == 5) {
+                tax(player);
+            } else if (field.getNumberOfField() == 10) {
+                player.setPrisonFree(false);
+                prison(answer, player);
             }
         }
     }
@@ -43,4 +45,24 @@ public class FieldService {
         return null;
     }
 
+    public void prison(int answer, Player player) {
+        if (!player.isPrisonFree()) {
+            System.out.println("Вы освобождены из тюрьмы, потому что у вас есть карта.");
+            player.setPrisonFree(true);
+        } else {
+            System.out.println("Хотите заплатить 300, чтобы выйти из тюрьмы?");
+            if (answer == 1) {
+                System.out.println("Да");
+                player.setMoney(player.getMoney() - 300);
+                player.setPrisonFree(true);
+            } else if (answer == 0) {
+                System.out.println("Нет");
+                System.out.println("Вам нужно пропустить 3 хода");
+            }
+        }
+    }
+
+    public void tax(Player player) {
+        player.setMoney((int) (player.getMoney() * 0.2));
+    }
 }

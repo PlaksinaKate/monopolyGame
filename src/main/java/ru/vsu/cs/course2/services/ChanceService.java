@@ -8,6 +8,8 @@ import ru.vsu.cs.course2.model.fields.StreetField;
 import ru.vsu.cs.course2.util.CircleList;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Queue;
 
 public class ChanceService {
@@ -15,30 +17,25 @@ public class ChanceService {
     private PlayerService playerService = new PlayerService();
     private ActionService actionService = new ActionService();
 
-    public void chance(Player player, ArrayList<Actions> playerAction, Queue<Chance> chance, CircleList<BaseField> fields, String answer, int numberOfField, Queue<Player> players) {
+    public void chance(Player player, ArrayList<Actions> playerAction, Queue<Chance> chance, CircleList<BaseField> fields, int answer, int numberOfField, Queue<Player> players, int answer2) {
         FieldService fieldService = new FieldService();
         System.out.println(chance.peek().getText());
-        System.out.println("Игрок:" + player.getPlayerName() + " отправляется на поле под номером: " + chance.peek().getNumberOfField());
-        actionService.addAction(player, playerAction, fieldService.searchField(chance.peek().getNumberOfField(), fields));
-        if (fieldService.searchField(chance.peek().getNumberOfField(), fields).getClass().getSimpleName().equals("StreetField")) {
-            StreetField streetField = (StreetField) fieldService.searchField(chance.peek().getNumberOfField(), fields);
-            if (streetField.getPlayer() != player) {
-                System.out.println("Игроку нужно заплатить за аренду");
-                streetService.payRent(streetField, player);
-            } else if (streetField.getPlayer() == null) {
-                System.out.println("Вы можете купить эту улицу");
-                if (answer == "Да") {
-                    System.out.println("Я хочу ее купить!");
-                    streetService.buyStreet(player, streetField);
-                } else if (answer == "Нет") {
-                    System.out.println("Я не хочу ее покупать!");
-                }
-            }
-        } else if (fieldService.searchField(chance.peek().getNumberOfField(), fields).getClass().getSimpleName().equals("BaseField")) {
-            System.out.println("Вы на старте!");
-            playerService.checkStart(players.peek(),numberOfField);
-
+        if (chance.peek().getNumberOfField() != 0) {
+            System.out.println("Игрок:" + player.getPlayerName() + " отправляется на поле под номером: " + chance.peek().getNumberOfField());
         }
-        chance.add(chance.poll());
+        actionService.addAction(player, playerAction, fieldService.searchField(chance.peek().getNumberOfField(), fields));
+        BaseField field = fieldService.searchField(chance.peek().getNumberOfField(), fields);
+        if (field.getClass().getSimpleName().equals("StreetField")) {
+            StreetField streetField = (StreetField) fieldService.searchField(chance.peek().getNumberOfField(), fields);
+            streetService.street(streetField, answer, player, answer2);
+        } else if (field.getClass().getSimpleName().equals("BaseField")) {
+            if (field.getNumberOfField() == 1) {
+                System.out.println("Вы на старте!");
+                playerService.checkStart(players.peek(), numberOfField);
+            } else if (field.getNumberOfField() == 10)
+                player.setPrisonFree(false);
+        } else
+            chance.add(chance.poll());
     }
+
 }

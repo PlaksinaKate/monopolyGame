@@ -14,20 +14,24 @@ import java.util.Queue;
 public class FieldService {
     private StreetService streetService = new StreetService();
     private TreasuryService treasuryService = new TreasuryService();
+    private ActionService actionService = new ActionService();
 
-    public void checkField(BaseField field, int answer2, int answer, Player player, ArrayList<Actions> playerAction, Queue<Chance> chance, CircleList<BaseField> fields, Queue<Treasury> treasury, int numberOfField, Queue<Player> players) {
+
+    public void checkField(BaseField field, int answer, Player player, ArrayList<Actions> playerAction, Queue<Chance> chance, CircleList<BaseField> fields, Queue<Treasury> treasury, int numberOfField, Queue<Player> players) {
         ChanceService chanceService = new ChanceService();
+        actionService.addAction(players.peek(), playerAction, searchField(numberOfField, fields));
         if (field.getClass().getSimpleName().equals("StreetField")) {
             StreetField street = (StreetField) field;
-            streetService.street(street, answer, player, answer2);
+            streetService.street(street, answer, player);
         } else if (field.getClass().getSimpleName().equals("ActionField")) {
             if (field.getName() == "Шанс") {
-                chanceService.chance(player, playerAction, chance, fields, answer, numberOfField, players, answer2);
+                chanceService.chance(player, playerAction, chance, fields, answer, numberOfField, players);
             } else if (field.getName() == "Казна") {
                 treasuryService.treasury(treasury, player);
             }
         } else if (field.getClass().getSimpleName().equals("BaseField")) {
             if (field.getNumberOfField() == 5) {
+                System.out.println("Оплатите налог");
                 tax(player);
             } else if (field.getNumberOfField() == 10) {
                 player.setPrisonFree(false);
@@ -46,9 +50,8 @@ public class FieldService {
     }
 
     public void prison(int answer, Player player) {
-        if (!player.isPrisonFree()) {
+        if (player.isPrisonFree()) {
             System.out.println("Вы освобождены из тюрьмы, потому что у вас есть карта.");
-            player.setPrisonFree(true);
         } else {
             System.out.println("Хотите заплатить 300, чтобы выйти из тюрьмы?");
             if (answer == 1) {

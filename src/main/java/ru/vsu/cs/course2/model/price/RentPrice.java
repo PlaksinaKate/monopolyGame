@@ -1,7 +1,9 @@
 package ru.vsu.cs.course2.model.price;
 
 public class RentPrice {
-    private int rentPriceWithoutBuildings, rentPriceWithHouse, rentPriceWithHotel;
+    private int rentPriceWithoutBuildings;
+    private int rentPriceWithHouse;
+    private int rentPriceWithHotel;
 
     public RentPrice(int rentPriceWithoutBuildings, int rentPriceWithHouse, int rentPriceWithHotel) {
         this.rentPriceWithoutBuildings = rentPriceWithoutBuildings;

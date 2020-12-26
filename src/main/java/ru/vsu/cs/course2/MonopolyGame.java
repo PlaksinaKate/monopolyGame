@@ -1,17 +1,17 @@
 package ru.vsu.cs.course2;
 
+import ru.vsu.cs.course2.json.JSon;
 import ru.vsu.cs.course2.model.Player;
 import ru.vsu.cs.course2.model.actions.Actions;
 import ru.vsu.cs.course2.model.cards.Chance;
 import ru.vsu.cs.course2.model.cards.Treasury;
 import ru.vsu.cs.course2.model.fields.BaseField;
-import ru.vsu.cs.course2.services.FieldService;
 import ru.vsu.cs.course2.services.InfoService;
 import ru.vsu.cs.course2.services.MonopolyService;
-import ru.vsu.cs.course2.services.StreetService;
 import ru.vsu.cs.course2.util.CircleList;
 
-import javax.management.Query;
+
+import java.io.IOException;
 import java.util.*;
 
 public class MonopolyGame {
@@ -20,7 +20,6 @@ public class MonopolyGame {
     private Queue<Treasury> treasury;
     private Queue<Chance> chance;
     private Queue<Player> players;
-    private Map<Player, BaseField> ownFields;
     private ArrayList<Actions> playerActions;
 
     public MonopolyGame() {
@@ -28,7 +27,6 @@ public class MonopolyGame {
         treasury = new LinkedList<>();
         chance = new LinkedList<>();
         players = new LinkedList<>();
-        ownFields = new HashMap<>();
         playerActions = new ArrayList<>();
     }
 
@@ -43,4 +41,5 @@ public class MonopolyGame {
         MonopolyService monopolyService = new MonopolyService();
         monopolyService.playMonopoly(fields, treasury, chance, players, playerActions);
     }
+
 }

@@ -10,10 +10,9 @@ import ru.vsu.cs.course2.model.price.Price;
 import ru.vsu.cs.course2.model.price.RentPrice;
 import ru.vsu.cs.course2.util.CircleList;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Queue;
-import java.util.Stack;
+
 
 public class InfoService {
 
@@ -91,7 +90,7 @@ public class InfoService {
             Player player = new Player();
             player.setPlayerName(name);
             player.setMoney(1500);
-            player.setPrisonFree(true);
+            player.setPrisonFree(false);
             players.add(player);
         }
 

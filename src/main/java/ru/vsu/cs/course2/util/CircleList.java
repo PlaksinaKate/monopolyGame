@@ -22,16 +22,6 @@ public class CircleList<T> implements Iterable<T> {
         }
     }
 
-    public int size() {
-        int count = 0;
-        Element el = head;
-        while (el != null) {
-            count++;
-            el = el.next;
-        }
-        return count;
-    }
-
     public Iterator<T> iterator() {
         return new Iterator<T>() {
 
@@ -39,7 +29,7 @@ public class CircleList<T> implements Iterable<T> {
 
             @Override
             public boolean hasNext() {
-                return el != tail.next;
+                return el != null;
             }
 
 

@@ -9,7 +9,8 @@ public class StreetField extends BaseField {
     private String color;
     private Player player;
     private Price price;
-    private boolean hotel, house;
+    private boolean  hotel;
+    private boolean house;
 
     public StreetField(String name, int numberOfField, String color, Player player, Price price, boolean hotel, boolean house) {
         super(name, numberOfField);

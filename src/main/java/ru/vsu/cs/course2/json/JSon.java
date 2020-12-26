@@ -27,7 +27,7 @@ public class JSon {
         Gson gson = initG();
         FileReader fileReader = new FileReader(file);
         JsonReader jsonReader = new JsonReader(fileReader);
-        return gson.fromJson(jsonReader, Actions.class);
+        return gson.fromJson(jsonReader, ArrayList.class);
     }
 
 

@@ -70,6 +70,7 @@ public class MonopolyService {
         JSon jSon = new JSon();
         try {
             jSon.serialize(playerActions, ".json");
+            jSon.deserialize(playerActions, ".json");
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -8,5 +8,6 @@ public class Main {
         MonopolyGame m = new MonopolyGame();
         m.setUpMonopoly();
         m.playGame();
+
     }
 }

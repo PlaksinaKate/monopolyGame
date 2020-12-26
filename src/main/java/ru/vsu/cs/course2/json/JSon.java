@@ -3,8 +3,6 @@ package ru.vsu.cs.course2.json;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
-import ru.vsu.cs.course2.json.converter.PlayerConverter;
-import ru.vsu.cs.course2.model.Player;
 import ru.vsu.cs.course2.model.actions.Actions;
 
 
@@ -34,7 +32,6 @@ public class JSon {
     private Gson initG() {
         return new GsonBuilder().
                 setPrettyPrinting()
-                .registerTypeAdapter(Player.class, new PlayerConverter())
                 .create();
     }
 

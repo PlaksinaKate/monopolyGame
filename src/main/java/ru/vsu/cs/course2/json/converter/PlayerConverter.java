@@ -2,10 +2,8 @@ package ru.vsu.cs.course2.json.converter;
 
 import com.google.gson.*;
 import ru.vsu.cs.course2.model.Player;
-import ru.vsu.cs.course2.model.actions.Actions;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 

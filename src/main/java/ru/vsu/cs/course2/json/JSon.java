@@ -6,6 +6,7 @@ import com.google.gson.stream.JsonReader;
 import ru.vsu.cs.course2.model.actions.Actions;
 
 
+import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -30,8 +31,9 @@ public class JSon {
 
 
     private Gson initG() {
-        return new GsonBuilder().
-                setPrettyPrinting()
+        return new GsonBuilder()
+                .setPrettyPrinting()
+                .registerTypeAdapter(String.class, new ColorConverter())
                 .create();
     }
 

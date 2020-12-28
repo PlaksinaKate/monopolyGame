@@ -67,6 +67,10 @@ public class MonopolyService {
         }
         System.out.println();
         System.err.println("Выиграл(а) " + players.peek().getPlayerName() + " !");
+        serialization(playerActions);
+    }
+
+    public void serialization(ArrayList<Actions> playerActions) {
         JSon jSon = new JSon();
         try {
             jSon.serialize(playerActions, ".json");

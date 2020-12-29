@@ -10,10 +10,9 @@ public class Player {
         this.money = money;
         this.prisonFree = prisonFree;
     }
-
-    public Player() {
-        this(null, 0, true);
-    }
+//    public Player() {
+//        this(null, 0, true);
+//    }
 
     public void setPlayerName(String playerName) {
         this.playerName = playerName;

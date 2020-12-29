@@ -87,10 +87,7 @@ public class InfoService {
         names.add("Даниил");
         names.add("Олеся");
         for (String name : names) {
-            Player player = new Player();
-            player.setPlayerName(name);
-            player.setMoney(1500);
-            player.setPrisonFree(false);
+            Player player = new Player(name, 1500, false);
             players.add(player);
         }
 

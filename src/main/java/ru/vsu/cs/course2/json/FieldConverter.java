@@ -9,13 +9,13 @@ public class FieldConverter implements JsonSerializer<BaseField>, JsonDeserializ
     @Override
     public String deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         JsonObject object = new JsonObject();
-        String name = jsonDeserializationContext.deserialize(object.get("название поля"), String.class);
+        String name = jsonDeserializationContext.deserialize(object.get("field name"), String.class);
         return name;
     }
 
     @Override
     public JsonElement serialize(BaseField baseField, Type type, JsonSerializationContext jsonSerializationContext) {
         JsonObject object = new JsonObject();
-        object.addProperty("название поля", baseField.getName());
+        object.addProperty("field name", baseField.getName());
         return object;    }
 }

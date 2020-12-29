@@ -45,9 +45,9 @@ public class JSon {
     private Gson initG() {
         return new GsonBuilder()
                 .setPrettyPrinting()
-                .registerTypeAdapter(String.class, new ColorConverter())
-                .registerTypeAdapter(Player.class, new PlayerConverter())
-                .registerTypeAdapter(BaseField.class, new FieldConverter())
+                //.registerTypeAdapter(String.class, new ColorConverter())
+                //.registerTypeAdapter(Player.class, new PlayerConverter())
+               // .registerTypeAdapter(BaseField.class, new FieldConverter())
                 .create();
     }
 

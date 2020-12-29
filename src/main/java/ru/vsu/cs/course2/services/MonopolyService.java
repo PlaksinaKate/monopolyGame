@@ -16,6 +16,7 @@ public class MonopolyService {
     private ActionService actionService = new ActionService();
     private PrintService printService = new PrintService();
     private FieldService fieldService = new FieldService();
+    private Actions actions = new Actions();
 
     public void playMonopoly(CircleList<BaseField> fields, Queue<Treasury> treasury, Queue<Chance> chance, Queue<Player> players, ArrayList<Actions> playerActions) {
         System.out.println("Игра началась");
@@ -38,7 +39,10 @@ public class MonopolyService {
         System.err.println("Игра началась!");
         System.out.println();
 
-        System.out.println();
+//        System.out.println();
+//        for (int i = 0; i < playerActions.size(); i++) {
+//            actions.setPlayer(playerActions.get(i).getPlayer());
+//        }
         int count = 0;
         while (players.size() != 1) {
             if (players.peek().getMoney() >= 0) {
@@ -65,20 +69,32 @@ public class MonopolyService {
                 System.err.println("Игрок " + players.poll().getPlayerName() + " выбывает из игры");
             }
         }
+        for (int i = 0; i < playerActions.size(); i++) {
+            actions.setPlayer(playerActions.get(i).getPlayer());
+            actions.setLocation(playerActions.get(i).getLocation());
+            serialization(actions);
+        }
         System.out.println();
         System.err.println("Выиграл(а) " + players.peek().getPlayerName() + " !");
-        serialization(playerActions);
     }
 
-    public void serialization(ArrayList<Actions> playerActions) {
+    public void serialization(Actions actions) {
         JSon jSon = new JSon();
         try {
-            jSon.serialize(playerActions, ".json");
-            jSon.deserialize(playerActions, ".json");
+            jSon.serialize(actions, ".json");
+            jSon.deserialize(".json");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
+//    public void serialization(ArrayList<Actions> actions) {
+//        JSon jSon = new JSon();
+//        try {
+//            jSon.serialize(actions, ".json");
+//            jSon.deserialize(".json");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }
 

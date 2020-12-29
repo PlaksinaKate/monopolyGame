@@ -54,7 +54,4 @@ public class PrintService {
             System.out.println("Вам выпало поле: " + fieldService.searchField(numberOfField, fields).getName());
         }
     }
-
-
-
 }

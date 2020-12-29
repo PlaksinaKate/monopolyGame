@@ -9,6 +9,9 @@ public class Actions {
     private Player player;
     private ArrayList<BaseField> location;
 
+    public Actions() {
+    }
+
     public Actions(Player player, ArrayList<BaseField> location) {
         this.player = player;
         this.location = location;

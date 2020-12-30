@@ -16,7 +16,6 @@ import java.util.*;
 
 public class MonopolyGame {
     private InfoService infoService = new InfoService();
-    private Actions actions;
     private CircleList<BaseField> fields;
     private Queue<Treasury> treasury;
     private Queue<Chance> chance;
@@ -24,7 +23,6 @@ public class MonopolyGame {
     private ArrayList<Actions> playerActions;
 
     public MonopolyGame() {
-        actions = new Actions();
         fields = new CircleList<>();
         treasury = new LinkedList<>();
         chance = new LinkedList<>();
@@ -41,7 +39,7 @@ public class MonopolyGame {
 
     public void playGame() {
         MonopolyService monopolyService = new MonopolyService();
-        monopolyService.playMonopoly(fields, treasury, chance, players, playerActions);
+        monopolyService.playMonopoly(fields, treasury, chance, players);
     }
 
 }

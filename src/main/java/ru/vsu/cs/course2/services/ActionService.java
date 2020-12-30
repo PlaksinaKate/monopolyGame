@@ -14,7 +14,7 @@ public class ActionService {
 
     private FieldService fieldService;
 
-    public int dice(int count, Player player, int answer, ArrayList<Actions> playerActions, CircleList<BaseField> fields) {
+    public int dice(int count, Player player, int answer, Actions actions, CircleList<BaseField> fields) {
         int firstDice = (int) (Math.random() * 6 + 1);
         int secondDice = (int) (Math.random() * 6 + 1);
 
@@ -33,7 +33,7 @@ public class ActionService {
                     System.out.println("Вам повезло. Выпало: " + diceValue);
                 } else {
                     System.err.println("Вы должны отправиться в тюрьму ");
-                    addAction(player, playerActions, getField(fields, 10));
+                    addAction(player, actions, getField(fields, 10));
                     player.setPrisonFree(false);
                     fieldService = new FieldService();
                     fieldService.prison(answer, player);
@@ -46,7 +46,7 @@ public class ActionService {
 
     }
 
-    public ArrayList<Actions> startLocation(ArrayList<Actions> playerActions, Queue<Player> players, CircleList<BaseField> fields) {
+    public Actions startLocation(Actions actions, Queue<Player> players, CircleList<BaseField> fields) {
         BaseField startBaseField = null;
         for (BaseField baseField : fields) {
             if (baseField.getNumberOfField() == 1) {
@@ -57,19 +57,19 @@ public class ActionService {
         for (Player player : players) {
             ArrayList<BaseField> list = new ArrayList<>();
             list.add(startBaseField);
-            playerActions.add(new Actions(player, list));
+            actions.getMoves().put(player, list);
         }
-        return playerActions;
+        return actions;
     }
 
-    public void whoGoesFirst(Queue<Player> players, ArrayList<Actions> playerActions, CircleList<BaseField> fields) {
+    public void whoGoesFirst(Queue<Player> players, Actions actions, CircleList<BaseField> fields) {
         Map<Player, Integer> playerMap = new HashMap<>();
         ArrayList<Player> players1 = new ArrayList<>();
         int answer = (int) (Math.random() * 2);
         for (Player player : players) {
             System.out.println("Игрок " + player.getPlayerName() + " бросает кубик");
             players1.add(player);
-            playerMap.put(player, dice(0, player, answer, playerActions, fields));
+            playerMap.put(player, dice(0, player, answer, actions, fields));
             System.out.println();
         }
         //проверка на одинаковые значения
@@ -78,7 +78,7 @@ public class ActionService {
             while (temp != players.size()) {
                 if (playerMap.get(players1.get(i)) == playerMap.get(players1.get(temp)) && temp != i) {
                     System.out.println("У игроков " + players1.get(i).getPlayerName() + " " + players1.get(temp).getPlayerName() + " выпало одинаковое значение кубика." + players1.get(temp).getPlayerName() + " должен перебросить кубик.");
-                    playerMap.get(players1.get(temp)).equals(dice(0, players1.get(temp), answer, playerActions, fields));
+                    playerMap.get(players1.get(temp)).equals(dice(0, players1.get(temp), answer, actions, fields));
                     System.out.println();
                 }
                 temp++;
@@ -101,12 +101,12 @@ public class ActionService {
         }
     }
 
-    public int getNumberOfField(ArrayList<Actions> playerActions, Player player) {
+    public int getNumberOfField(Actions actions, Player player) {
         int value = 0;
-        for (int i = 0; i < playerActions.size(); i++) {
-            if (playerActions.get(i).getPlayer() == player) {
-                int lastField = playerActions.get(i).getLocation().size() - 1;
-                value = playerActions.get(i).getLocation().get(lastField).getNumberOfField();
+        for (Map.Entry<Player, ArrayList<BaseField>> action : actions.getMoves().entrySet()) {
+            if (action.getKey() == player) {
+                int lastField = action.getValue().size() - 1;
+                value = action.getValue().get(lastField).getNumberOfField();
                 break;
             }
         }
@@ -122,11 +122,10 @@ public class ActionService {
         return null;
     }
 
-    public void addAction(Player player, ArrayList<Actions> playerAction, BaseField field) {
-        for (int i = 0; i < playerAction.size(); i++) {
-            if (playerAction.get(i).getPlayer() == player) {
-                playerAction.get(i).getLocation().add(field);
-                break;
+    public void addAction(Player player, Actions actions, BaseField field) {
+        for (Map.Entry<Player, ArrayList<BaseField>> action : actions.getMoves().entrySet()) {
+            if (action.getKey() == player) {
+                action.getValue().add(field);
             }
         }
     }

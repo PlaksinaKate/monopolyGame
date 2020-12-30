@@ -4,33 +4,26 @@ import ru.vsu.cs.course2.model.Player;
 import ru.vsu.cs.course2.model.fields.BaseField;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Actions {
-    private Player player;
-    private ArrayList<BaseField> location;
+    private Map<Player, ArrayList<BaseField>> moves;
 
     public Actions() {
+        this.moves = new HashMap<>();
     }
 
-    public Actions(Player player, ArrayList<BaseField> location) {
-        this.player = player;
-        this.location = location;
+    public Actions(Map<Player, ArrayList<BaseField>> moves) {
+        this.moves = moves;
     }
 
-    public ArrayList<BaseField> getLocation() {
-        return location;
+    public Map<Player, ArrayList<BaseField>> getMoves() {
+        return moves;
     }
 
-    public void setLocation(ArrayList<BaseField> location) {
-        this.location = location;
-    }
-
-    public Player getPlayer() {
-        return player;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setMoves(Map<Player, ArrayList<BaseField>> moves) {
+        this.moves = moves;
     }
 }
 

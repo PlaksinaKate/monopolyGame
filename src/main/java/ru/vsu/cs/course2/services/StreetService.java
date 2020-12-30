@@ -94,4 +94,27 @@ public class StreetService {
             System.out.println("Нет, не хочу");
         }
     }
+
+    public void changeColor(CircleList<BaseField> fields) {
+        for (BaseField field : fields) {
+            if (field.getClass().getSimpleName().equals("StreetField")) {
+                StreetField streetField = (StreetField) field;
+                if (streetField.getColor().equals("\u001b[37m")) {
+                    streetField.setColor("белый");
+                } else if (streetField.getColor().equals("\u001B[36m")) {
+                    streetField.setColor("циан");
+                } else if (streetField.getColor().equals("\u001B[35m")) {
+                    streetField.setColor("пурпуный");
+                } else if (streetField.getColor().equals("\u001B[34m")) {
+                    streetField.setColor("голубой");
+                } else if (streetField.getColor().equals("\u001B[33m")) {
+                    streetField.setColor("желтый");
+                } else if (streetField.getColor().equals("\u001B[32m")) {
+                    streetField.setColor("зеленый");
+                } else if (streetField.getColor().equals("\u001B[31m")) {
+                    streetField.setColor("красный");
+                }
+            }
+        }
+    }
 }

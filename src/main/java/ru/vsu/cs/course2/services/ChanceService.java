@@ -7,20 +7,20 @@ import ru.vsu.cs.course2.model.fields.BaseField;
 import ru.vsu.cs.course2.model.fields.StreetField;
 import ru.vsu.cs.course2.util.CircleList;
 
-import java.util.ArrayList;
+
 import java.util.Queue;
 
 public class ChanceService {
     private StreetService streetService = new StreetService();
     private ActionService actionService = new ActionService();
 
-    public void chance(Player player, ArrayList<Actions> playerAction, Queue<Chance> chance, CircleList<BaseField> fields, int answer, int numberOfField, Queue<Player> players) {
+    public void chance(Player player, Actions action, Queue<Chance> chance, CircleList<BaseField> fields, int answer, int numberOfField, Queue<Player> players) {
         FieldService fieldService = new FieldService();
         System.out.println(chance.peek().getText());
         if (chance.peek().getNumberOfField() != 10) {
             System.out.println("Игрок:" + player.getPlayerName() + " отправляется на поле под номером: " + chance.peek().getNumberOfField());
         }
-        actionService.addAction(player, playerAction, fieldService.searchField(chance.peek().getNumberOfField(), fields));
+        actionService.addAction(player, action, fieldService.searchField(chance.peek().getNumberOfField(), fields));
         BaseField field = fieldService.searchField(chance.peek().getNumberOfField(), fields);
         if (field.getClass().getSimpleName().equals("StreetField")) {
             StreetField streetField = (StreetField) fieldService.searchField(chance.peek().getNumberOfField(), fields);

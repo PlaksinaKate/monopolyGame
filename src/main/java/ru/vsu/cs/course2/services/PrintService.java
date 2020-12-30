@@ -10,6 +10,7 @@ import java.util.*;
 
 public class PrintService {
     private FieldService fieldService = new FieldService();
+    private ActionService actionService = new ActionService();
 
     public void printFields(CircleList<BaseField> fields) {
         String reset = "\u001b[0m";
@@ -34,7 +35,7 @@ public class PrintService {
 
     }
 
-    public void printField(int numberOfField, CircleList<BaseField> fields, ArrayList<Actions> playerActions, Player player) {
+    public void printField(int numberOfField, CircleList<BaseField> fields, Actions actions, Player player) {
         if (fieldService.searchField(numberOfField, fields).getClass().getSimpleName().equals("StreetField")) {
             StreetField street = (StreetField) fieldService.searchField(numberOfField, fields);
             if (street.getPlayer() == null) {
@@ -42,12 +43,7 @@ public class PrintService {
             } else {
                 System.out.println("Вы передвинулись на улицу: " + street.getName() + ", у которой есть владелец. Вы должны заплатить арендную плату.");
             }
-            for (int i = 0; i < playerActions.size(); i++) {
-                if (playerActions.get(i).getPlayer() == player) {
-                    playerActions.get(i).getLocation().add(street);
-                    break;
-                }
-            }
+            actionService.addAction(player,actions,street);
         } else if (fieldService.searchField(numberOfField, fields).getClass().getSimpleName().equals("ActionField")) {
             System.out.println("Вам выпало поле: " + fieldService.searchField(numberOfField, fields).getName());
         } else if (fieldService.searchField(numberOfField, fields).getClass().getSimpleName().equals("BaseField")) {

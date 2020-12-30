@@ -3,13 +3,12 @@ package ru.vsu.cs.course2.model.fields;
 import ru.vsu.cs.course2.model.Player;
 import ru.vsu.cs.course2.model.price.Price;
 
-import java.awt.*;
 
 public class StreetField extends BaseField {
     private String color;
     private Player player;
     private Price price;
-    private boolean  hotel;
+    private boolean hotel;
     private boolean house;
 
     public StreetField(String name, int numberOfField, String color, Player player, Price price, boolean hotel, boolean house) {
@@ -19,6 +18,10 @@ public class StreetField extends BaseField {
         this.price = price;
         this.hotel = hotel;
         this.house = house;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public String getColor() {

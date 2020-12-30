@@ -17,15 +17,15 @@ public class FieldService {
     private ActionService actionService = new ActionService();
 
 
-    public void checkField(BaseField field, int answer, Player player, ArrayList<Actions> playerAction, Queue<Chance> chance, CircleList<BaseField> fields, Queue<Treasury> treasury, int numberOfField, Queue<Player> players) {
+    public void checkField(BaseField field, int answer, Player player, Actions actions, Queue<Chance> chance, CircleList<BaseField> fields, Queue<Treasury> treasury, int numberOfField, Queue<Player> players) {
         ChanceService chanceService = new ChanceService();
-        actionService.addAction(players.peek(), playerAction, searchField(numberOfField, fields));
+        actionService.addAction(players.peek(), actions, searchField(numberOfField, fields));
         if (field.getClass().getSimpleName().equals("StreetField")) {
             StreetField street = (StreetField) field;
             streetService.street(street, answer, player);
         } else if (field.getClass().getSimpleName().equals("ActionField")) {
             if (field.getName() == "Шанс") {
-                chanceService.chance(player, playerAction, chance, fields, answer, numberOfField, players);
+                chanceService.chance(player, actions, chance, fields, answer, numberOfField, players);
             } else if (field.getName() == "Казна") {
                 treasuryService.treasury(treasury, player);
             }

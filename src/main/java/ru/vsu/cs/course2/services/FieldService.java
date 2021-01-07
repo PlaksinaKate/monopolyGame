@@ -8,7 +8,6 @@ import ru.vsu.cs.course2.model.fields.BaseField;
 import ru.vsu.cs.course2.model.fields.StreetField;
 import ru.vsu.cs.course2.util.CircleList;
 
-import java.util.ArrayList;
 import java.util.Queue;
 
 public class FieldService {

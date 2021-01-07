@@ -43,11 +43,47 @@ public class PrintService {
             } else {
                 System.out.println("Вы передвинулись на улицу: " + street.getName() + ", у которой есть владелец. Вы должны заплатить арендную плату.");
             }
-            actionService.addAction(player,actions,street);
+            actionService.addAction(player, actions, street);
         } else if (fieldService.searchField(numberOfField, fields).getClass().getSimpleName().equals("ActionField")) {
             System.out.println("Вам выпало поле: " + fieldService.searchField(numberOfField, fields).getName());
         } else if (fieldService.searchField(numberOfField, fields).getClass().getSimpleName().equals("BaseField")) {
             System.out.println("Вам выпало поле: " + fieldService.searchField(numberOfField, fields).getName());
         }
+    }
+
+    public void printFieldsWithPlayers(CircleList<BaseField> fields, Actions actions, Queue<Player> players) {
+        String reset = "\u001b[0m";
+        Map<Player, BaseField> lastField = new HashMap<>();
+        for (Player player : players) {
+            lastField.put(player, actions.getMoves().get(player).get(actions.getMoves().get(player).size() - 1));
+        }
+
+        for (BaseField field : fields) {
+            Player playerOnField = null;
+            for (Map.Entry<Player, BaseField> map : lastField.entrySet()) {
+                if (field == map.getValue())
+                    playerOnField = map.getKey();
+            }
+            if (playerOnField != null) {
+                if (field.getClass().getSimpleName().equals("StreetField")) {
+                    StreetField streetField = (StreetField) field;
+                    System.out.println(streetField.getColor() + streetField.getNumberOfField() + ". " + field.getName() + reset + "                      " + playerOnField.getPlayerName());
+                } else if (field.getClass().getSimpleName().equals("ActionField")) {
+                    System.out.println(field.getNumberOfField() + ". " + field.getName() +"                      " + playerOnField.getPlayerName());
+                } else if (field.getClass().getSimpleName().equals("BaseField")) {
+                    System.out.println(field.getNumberOfField() + ". " + field.getName() + "                      " + playerOnField.getPlayerName());
+                }
+            } else {
+                if (field.getClass().getSimpleName().equals("StreetField")) {
+                    StreetField streetField = (StreetField) field;
+                    System.out.println(streetField.getColor() + streetField.getNumberOfField() + ". " + field.getName() + reset);
+                } else if (field.getClass().getSimpleName().equals("ActionField")) {
+                    System.out.println(field.getNumberOfField() + ". " + field.getName());
+                } else if (field.getClass().getSimpleName().equals("BaseField")) {
+                    System.out.println(field.getNumberOfField() + ". " + field.getName());
+                }
+            }
+        }
+
     }
 }

@@ -18,7 +18,6 @@ public class ActionService {
         int firstDice = (int) (Math.random() * 6 + 1);
         int secondDice = (int) (Math.random() * 6 + 1);
 
-
         int diceValue = firstDice + secondDice;
         if (count != 0) {
             if (firstDice != secondDice) {
@@ -43,7 +42,6 @@ public class ActionService {
             System.out.println("Игрок бросает кости. Выпало всего: " + diceValue);
         }
         return diceValue;
-
     }
 
     public Actions startLocation(Actions actions, Queue<Player> players, CircleList<BaseField> fields) {
@@ -138,6 +136,4 @@ public class ActionService {
         }
         return numberOfField;
     }
-
-
 }

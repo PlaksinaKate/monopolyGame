@@ -38,9 +38,16 @@ public class MonopolyService {
         actionService.startLocation(actions, players, fields);
         System.err.println("Игра началась!");
         System.out.println();
-        streetService.changeColor(fields);
+
         int count = 0;
+        int temp = 0;
         while (players.size() != 1) {
+            if (temp == players.size()) {
+                System.out.println();
+                printService.printFieldsWithPlayers(fields, actions, players);
+                System.out.println();
+                temp = 0;
+            }
             if (players.peek().getMoney() >= 0) {
                 System.out.println("Ход игрока: " + players.peek().getPlayerName());
                 int answer = (int) (Math.random() * 2);
@@ -64,20 +71,31 @@ public class MonopolyService {
             } else {
                 System.err.println("Игрок " + players.poll().getPlayerName() + " выбывает из игры");
             }
+            temp++;
         }
         System.out.println();
         System.err.println("Выиграл(а) " + players.peek().getPlayerName() + " !");
-        serialization(actions);
+        serialization(actions, fields);
     }
 
-    public void serialization(Actions actions) {
+    public void serialization(Actions actions, CircleList<BaseField> fields) {
         JSon jSon = new JSon();
         try {
+            streetService.changeColor(fields);
             jSon.serialize(actions, ".json");
-            jSon.deserialize(".json");
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Actions deserialization() {
+        JSon jSon = new JSon();
+        try {
+            return jSon.deserialize(".json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
 
